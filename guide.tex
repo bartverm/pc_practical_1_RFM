@@ -660,6 +660,10 @@ ans =
 \begin{exercise}
   Extend the river class with an \lstinline=L= property to hold the length of the river and a method that computes the bed elevation between $[0, L]$ at 15 points.
 \end{exercise}
+\begin{solution}
+\lstinputlisting{matlab/River_with_L.m}
+\end{solution}
+
 
 \section{The Backwater class}
 \label{sec:backwater_class}
@@ -691,10 +695,20 @@ This will generate a figure as in \autoref{fig:m2_curve}. The figure shows a lon
 \begin{exercise}
   What is the meaning of $a_e$ $a_c$ and $a_0$? Explain the meaning in terms of the underlying physics.
 \end{exercise}
+
+\begin{solution}
+    $a_e$ is the equilibrium depth. At this depth we have uniform flow and gravity force and friction force exactly balance each other.
+    $a_c$ is the critical depth. At this depth the flow is critical and the Froude number is equal to 1.
+    $a_0$ is the boundary condition. When this deviates from the equilibrium depth a backwater curve develops
+\end{solution}
+
 \begin{exercise}
   What is the meaning of $S_c$?
 \end{exercise}
 
+\begin{solution}
+    This is the critical slope. At this slope the equilibrium depth is equal to the critical depth. If a river's slope is larger we have a steep slope which features a supercritical flow in equilibrium. A lower slope results in a mild slope where a subcritical flow occurs in equilibrium conditions.
+\end{solution}
 Next to a number of quite obvious properties of the \lstinline{Backwater} object, there are also a few that require a bit more explanation:
 \begin{itemize}
   \item \lstinline{x_end} indicates the ending $x$ coordinate for the backwater computation that always starts at $x0$. 
@@ -706,8 +720,10 @@ The reason why the object is suggesting a possible ending coordinate is that som
 The curve that you produced with the \lstinline{Backwater} object is an M2-curve. You can find this curve also in figure 4.3 on page 76 of the lecture notes. Figures 4.3 to 4.5 in the lecture notes show all the types of backwater curves that can develop.
 
 \begin{exercise}
-  Try to reproduce all types of backwater curves modifying the properties of the \lstinline{Backwater} object and make a plot of the curve. 
+  Try to reproduce all types of backwater curves modifying the properties of the \lstinline{Backwater} object and make a plot of the curve. Note: make use of the \lstinline=x_target= property to set right length and direction of solution.
 \end{exercise}
+
+
 
 \begin{exercise}
   Pay attention to the spatial scales of the curve you produced. Can you discover some kind of pattern in the spatial scale of the backwater curves?
