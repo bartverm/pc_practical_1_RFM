@@ -479,7 +479,7 @@ Comments can be added anywhere in the script using a \lstinline!%! sign.
 \end{exercise}
 \begin{solution}
   Open a new file named \lstinline{weird_func.m} in the editor and type:
-  \lstinputlisting{weird_func.m}
+  \lstinputlisting{matlab/weird_func.m}
   Press \lstinline{Ctrl+S} to give the script a name and save it.
 \end{solution}
 
@@ -546,7 +546,7 @@ When plotting from a script it can be usefull to include a \lstinline!close all!
 
 \begin{solution}
   Open a new script in the editor and save it as \lstinline!plot_bed_slope.m!. Type the following:
-  \lstinputlisting{plot_bed_slope.m}
+  \lstinputlisting{matlab/plot_bed_slope.m}
 \end{solution}
 
 
@@ -587,7 +587,7 @@ When the function returns multiple results, you can get the results as follows:
 \end{exercise}
 \begin{solution}
 After creating a file with the name of the function you want to create (in this case \lstinline=bed_slope.m= add the following content:
-\lstinputlisting[]{bed_slope.m}
+\lstinputlisting[]{matlab/bed_slope.m}
 \end{solution}
 
 \subsection{Classes and objects}
@@ -635,23 +635,7 @@ You can change the properties of the class:
 An important property of handle classes in MATLAB is that if we copy the class, e.g. \lstinline=R_copy=R=, these copies point to the same object. That means that if I change a property of \lstinline=R_copy= the property of \lstinline=R= also changes. Both variables point to the same object.
 
 No we have a class, but this class is still pretty useless. Let's add some functionality. We might want to compute the critical slope of the river. For this we need a function. We can define a function within the class, which is called a ``method'' of the class:
-\begin{lstlisting}
-classdef River < handle
-  properties(Constant)
-    g=9.81
-  end
-  properties
-    slope=1e-4
-    discharge=1000
-    chezy=50
-  end
-  methods
-    function out=critical_slope(obj)
-      out=obj.g/obj.chezy^2;
-    end
-  end
-end
-\end{lstlisting}
+\lstinputlisting{matlab/River.m}
 
 We can now compute the critical slope as:
 \begin{lstlisting}
