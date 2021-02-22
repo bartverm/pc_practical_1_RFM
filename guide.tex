@@ -635,7 +635,7 @@ You can change the properties of the class:
 An important property of handle classes in MATLAB is that if we copy the class, e.g. \lstinline|R_copy=R|, these copies point to the same object. That means that if I change a property of \lstinline=R_copy= the property of \lstinline=R= also changes. Both variables point to the same object.
 
 No we have a class, but this class is still pretty useless. Let's add some functionality. We might want to compute the critical slope of the river. For this we need a function. We can define a function within the class, which is called a ``method'' of the class:
-\lstinputlisting[linerange=1-8,10-14,18-19]{matlab/River.m}
+\lstinputlisting[linerange={1-9,10-14,18-19}]{matlab/River.m}
 
 We can now compute the critical slope as:
 \begin{lstlisting}
@@ -661,7 +661,7 @@ ans =
   Extend the river class with an \lstinline=L= property to hold the length of the river and a method that computes the bed elevation between $[0, L]$ at 15 points.
 \end{exercise}
 \begin{solution}
-\lstinputlisting{matlab/River_with_L.m}
+\lstinputlisting{matlab/River.m}
 \end{solution}
 
 
