@@ -958,12 +958,89 @@ Now you know how to combine backwater curves you can improve you skills with the
 
 \begin{solution}
     \lstinputlisting[linerange={6-16}]{matlab/river_engineering_exercises.m}
+    \includegraphics[width=\linewidth]{matlab/riv_eng_1.pdf}
 \end{solution}
 
 
 \begin{exercise}
   Do the same as in the previous two exercises, but now for a bed slope of \num{5e-3}.
 \end{exercise}
+
+\begin{solution}
+Similarly to the previous solution we start by determining the slope type. Since the roughness is the same as in previous case, the critical slopes will also be the same. What changed is the bed slope, which has become steeper:
+    \begin{align*}
+    S_{c,1}&=\dfrac{g}{C_1^2}=\dfrac{\SI{9.81}{\m\per\s\squared}}{(\SI{65}{\chezyunit})^2}=\num{3.2e-3}\Rightarrow S_o > S_{c,1} \Rightarrow \text{Steep slope} \Rightarrow a_{e,1} < a_{c,1}\\
+    S_{c,2}&=\dfrac{g}{C_2^2}=\dfrac{\SI{9.81}{\m\per\s\squared}}{(\SI{55}{\chezyunit})^2}=\num{2.3e-3}\Rightarrow S_o > S_{c,2} \Rightarrow \text{Steep slope} \Rightarrow a_{e,2} < a_{c,2}
+    \end{align*}
+    We also know (just as in the previous case):
+    \begin{align*}
+        C_1 > C_2 \Rightarrow a_{e,1} < a_{e,2}
+    \end{align*}
+    Finally also in this case the critical depth $a_c$ is equal for the upstream and downstream parts.
+    Let's draw the lines for the normal depth and critical depth:
+    
+    \begin{asy}[width=\the\linewidth,inline=true]
+    import trembling;
+    real S_o1 = .2;
+    real S_o2 = .2;
+    
+    real L1= 1;
+    real L2= 1;
+    
+    tremble tr=tremble(angle=20,frequency=0.05,random=50,fuzz=1);
+    
+    real top=.7;
+    pair zb_start = (0,0);
+    pair zb_mid = zb_start + (L1, -L1*S_o1);
+    pair zb_end = zb_mid + (L2, -L2*S_o2);
+    draw(zb_start--zb_mid,linewidth(2));
+    draw(tr.deform(zb_mid--zb_end),linewidth(2));
+    draw(zb_start+(0,-0.1)--zb_start+(0,top), dashed);
+    draw(zb_mid+(0,-0.1)--zb_mid+(0,top), dashed);
+    draw(zb_end+(0,-0.1)--zb_end+(0,top), dashed);
+    draw(zb_start + (L1/5, top/3) -- zb_start + (L1/3, top/3-(L1/3-L1/5)*S_o1),EndArrow);
+    
+   real d_n1=.2, d_c=.4, d_n2=.3;
+    draw("$a_{e,1}$",align=S,shift(0,d_n1)*(zb_start--zb_mid), dashdotted);
+    draw("$a_{e,2}$",align=S,shift(0,d_n2)*(zb_mid--zb_end), dashdotted);
+    draw(Label("$a_c$", position=Relative(0.4), align=N),shift(0,d_c)*(zb_start--zb_mid--zb_end), dashdotted);
+    \end{asy}
+    
+    Other than in the previous case we now have a case with steep slopes. In equlibrium the flow thus will be supercritical and perturbations travel from upstream to downstream. The upstream reach will now be affecting the downstream reach. Therefore the upstream reach is in equilibrium. The downstream reach will develop a backwater with $a<a_e<a_c$, i.e. an S3 curve.
+    
+    \begin{asy}[width=\the\linewidth,inline=true]
+    import trembling;
+    real S_o1 = .2;
+    real S_o2 = .2;
+    
+    real L1= 1;
+    real L2= 1;
+    
+    tremble tr=tremble(angle=20,frequency=0.05,random=50,fuzz=1);
+    
+    real top=.7;
+    pair zb_start = (0,0);
+    pair zb_mid = zb_start + (L1, -L1*S_o1);
+    pair zb_end = zb_mid + (L2, -L2*S_o2);
+    draw(zb_start--zb_mid,linewidth(2));
+    draw(tr.deform(zb_mid--zb_end),linewidth(2));
+    draw(zb_start+(0,-0.1)--zb_start+(0,top), dashed);
+    draw(zb_mid+(0,-0.1)--zb_mid+(0,top), dashed);
+    draw(zb_end+(0,-0.1)--zb_end+(0,top), dashed);
+    draw(zb_start + (L1/5, top/3) -- zb_start + (L1/3, top/3-(L1/3-L1/5)*S_o1),EndArrow);
+    
+   real d_n1=.2, d_c=.4, d_n2=.3;
+    draw("$a_{e,1}$",align=S,shift(0,d_n1)*(zb_start--zb_mid), dashdotted);
+    draw("$a_{e,2}$",align=S,shift(0,d_n2)*(zb_mid--zb_end), dashdotted);
+    draw(Label("$a_c$", position=Relative(0.4), align=N),shift(0,d_c)*(zb_start--zb_mid--zb_end), dashdotted);
+    
+    draw(shift(0,d_n1)*(zb_start--zb_mid),blue);
+    draw(Label("S3", position=Relative(0.1), align=N),shift(0,d_n2)*(zb_mid-(0,d_n2-d_n1)..zb_end{dir(zb_mid--zb_end)}), blue);
+    \end{asy}
+    
+    We now create the same situation in Matlab:
+    
+\end{solution}
 
 \begin{exercise}
   Do again the same, but now we keep the roughness constant at $C=\SI{40}{\m\tothe{0.5}\per\s}$ while the bed slope changes from \num{2e-3} and \num{5e-3}
