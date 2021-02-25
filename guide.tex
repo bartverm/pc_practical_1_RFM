@@ -1039,12 +1039,63 @@ Similarly to the previous solution we start by determining the slope type. Since
     \end{asy}
     
     We now create the same situation in Matlab:
+    \lstinputlisting[linerange={18-30}]{matlab/river_engineering_exercises.m}
+    \includegraphics[width=\linewidth]{matlab/riv_eng_2.pdf}
     
+    Note the huge difference in scale of the backwaters of this exercise and the previous one, which is hard to appreciate with only the qualitative analysis.
 \end{solution}
 
 \begin{exercise}
   Do again the same, but now we keep the roughness constant at $C=\SI{40}{\m\tothe{0.5}\per\s}$ while the bed slope changes from \num{2e-3} and \num{5e-3}
 \end{exercise}
+
+\begin{solution}
+In this case we have the same critical slope for both reaches:
+    \begin{align*}
+        S_c=\dfrac{g}{C^2}=\dfrac{\SI{9.81}{\m\per\s\squared}}{(\SI{40}{\chezyunit})^2}=\num{6.1e-3}\Rightarrow\left\lbrace
+        \begin{array}{l}
+             S_{o,1} < S_c \Rightarrow \text{Mild slope} \Rightarrow a_{e,1} > a_{c,1} \\
+             S_{o,2} < S_c \Rightarrow \text{Mild slope} \Rightarrow a_{e,2} > a_{c,2} 
+        \end{array}
+        \right.
+    \end{align*}
+    The critical depth is equal for the two reaches. The normal depth will be smaller in the downstream steeper reach:
+    \begin{align*}
+        S_{o,1}<S_{o,2} \Rightarrow a_{e_1}>a_{e,2}
+    \end{align*}
+    Normal depths are subcritical for mild slopes so we will have a backwater in the upstream reach for which we have $a_c< a < a_n$ and thus an M2-curve develops:
+    
+    \begin{asy}[width=\the\linewidth,inline=true]
+    real S_o1 = .1;
+    real S_o2 = .2;
+    
+    real L1= 1;
+    real L2= 1;
+    
+    real top=.7;
+    pair zb_start = (0,0);
+    pair zb_mid = zb_start + (L1, -L1*S_o1);
+    pair zb_end = zb_mid + (L2, -L2*S_o2);
+    draw(zb_start--zb_mid,linewidth(2));
+    draw(zb_mid--zb_end,linewidth(2));
+    draw(zb_start+(0,-0.1)--zb_start+(0,top), dashed);
+    draw(zb_mid+(0,-0.1)--zb_mid+(0,top), dashed);
+    draw(zb_end+(0,-0.1)--zb_end+(0,top), dashed);
+    draw(zb_start + (L1/5, top/2) -- zb_start + (L1/3, top/2-(L1/3-L1/5)*S_o1),EndArrow);
+    
+    real d_n1=.4, d_c=.2, d_n2=.3;
+    draw("$a_{e,1}$",align=N,shift(0,d_n1)*(zb_start--zb_mid), dashdotted);
+    draw("$a_{e,2}$",align=N,shift(0,d_n2)*(zb_mid--zb_end), dashdotted);
+    draw(Label("$a_c$", position=Relative(0.4), align=N),shift(0,d_c)*(zb_start--zb_mid--zb_end), dashdotted);
+
+    draw(shift(0,d_n2)*(zb_mid--zb_end),blue);
+    draw("M2", align=S,shift(0,d_n1)*(zb_start{dir(zb_start--zb_mid)}..zb_mid+(0,d_n2-d_n1)), blue);
+     
+    \end{asy}
+    
+    We now again create the same situation in Matlab:
+    
+\end{solution}
 
 \begin{exercise}
   Do the same as the previous, but now with a roughness of $C=\SI{75}{\m\tothe{0.5}\per\s}$.
