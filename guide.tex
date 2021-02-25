@@ -1148,8 +1148,10 @@ We determine first the slope type:
     draw(shift(0,d_n1)*(zb_start--zb_mid),blue);
     draw("S2", align=N,shift(0,d_n2)*(zb_mid+(0,d_n1-d_n2)..zb_end{dir(zb_mid--zb_end)}), blue);
     \end{asy}
+
     In Matlab:
-    
+    \lstinputlisting[linerange={46-58}]{matlab/river_engineering_exercises.m}
+    \includegraphics[width=\linewidth]{matlab/riv_eng_4.pdf}
     
 \end{solution}
 
@@ -1173,14 +1175,20 @@ By now you should have a pretty good idea how backwater curves work.
 		b &= \SI{200}{\metre}&\\
 		Q	&= \SI{1118}{\cubic\m\per\s}&
 	\end{flalign*}
-
+	
+  \begin{exercise}
+    Using Matlab make a plot of the situation before the cutoff and one for the situation after the cutoff.
+  \end{exercise}
+  
+  \begin{solution}
+    
+  \end{solution}
+  
   \begin{exercise}
     Calculate the water depth at the locations P and R directly after the cut-off is realized ($t = 0$).
   \end{exercise}
 
-  \begin{exercise}
-    Make a plot of the situation before the cutoff and one for the situation after the cutoff
-  \end{exercise}
+
 
 
 \section{Hydraulic jump}
