@@ -15,8 +15,11 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{siunitx}
+\newcommand{\chezyunit}{\m\tothe{1/2}\per\s}
+
 \usepackage{hyperref}
 \usepackage{natbib}
+\usepackage{asymptote}
 
 \usepackage{parskip}
 \setlength{\parindent}{0pt}
@@ -635,7 +638,7 @@ You can change the properties of the class:
 An important property of handle classes in MATLAB is that if we copy the class, e.g. \lstinline|R_copy=R|, these copies point to the same object. That means that if I change a property of \lstinline=R_copy= the property of \lstinline=R= also changes. Both variables point to the same object.
 
 No we have a class, but this class is still pretty useless. Let's add some functionality. We might want to compute the critical slope of the river. For this we need a function. We can define a function within the class, which is called a ``method'' of the class:
-\lstinputlisting[linerange={1-9,10-14,18-19}]{matlab/River.m}
+\lstinputlisting[linerange={1-8,10-14,18-19}]{matlab/River.m}
 
 We can now compute the critical slope as:
 \begin{lstlisting}
@@ -794,6 +797,10 @@ R(1).x_end=R(1).x0-20e3;
   If you consider that the boundary condition is always imposed at $x=x0$, what implicit assumption did we make about the type of flow by defining the geometry as we did in the above lines?
 \end{exercise}
 
+\begin{solution}
+    The \lstinline|x_end| property was set to a negative value, meaning that the computation is done in upstream direction. This means that we assumed the flow to be subcritical. For supercritical flow we'd use a positive \lstinline|x_end|.
+\end{solution}
+
 The last thing that we need to do is set the right boundary condition. Since we start with the equilibrium situation, we will set the boundary depth equal to the equilibrium depth:
 
 \begin{lstlisting}
@@ -834,13 +841,36 @@ This produces \autoref{fig:widening_final}.
 \end{figure}
 
 \begin{exercise}
-  How do the results of the computed backwater compare with the results obtained with the analytical expressions in the lecture notes?
+  How do the results of the computed backwater compare with the results obtained with the analytical expressions in the reader (page 84)?
 \end{exercise}
+
+\begin{solution}
+    In the lecture notes a depth at the upstream end of the widening was found of \SI{3.80}{\m}.
+    We had already stored the depth for the middle reach when setting the boundary condition for the upstream end. The depth is 
+    \begin{lstlisting}
+>> a(end)
+
+ans =
+
+    3.8070
+    \end{lstlisting}
+    This is very close to the result found in the reader.
+\end{solution}
 
 \begin{exercise}
   Make a backwater calculation but this time for a river narrowing of the middle section to a width of \SI{160}{\m}
 \end{exercise}
 
+\begin{solution}
+    \begin{lstlisting}
+%% We change the width to 160 m
+R(2).b=160; % set the depth
+figure
+[x,a]=R(2).solve; % set the right boundary condition
+R(1).a0=a(end);
+plot(R)
+    \end{lstlisting}
+\end{solution}
 \subsection{Improve your river engineering skills}
 Now you know how to combine backwater curves you can improve you skills with the following exercises:
 
@@ -848,9 +878,87 @@ Now you know how to combine backwater curves you can improve you skills with the
   A river with a bed slope of \num{1e-4} has an upstream part with a roughness of $C=\SI{65}{\m\tothe{0.5}\per\s}$ and a downstream part with a roughness of $C=\SI{55}{\m\tothe{0.5}\per\s}$. Make a hand drawing of the kind of backwater curves you expect (hint: one of the two sides of the river is in equilibrium). You may need to do some simple calculations, which you can do using the backwater object.
 \end{exercise}
 
+\begin{solution}
+    We start by figuring out the type of slope in the two reaches and thus the relative magnitude of the equilibrium depth ($a_e$) and the critical depth ($a_c$). For this we first compute the value of the critical slope. Denoting the reaches with subscripts numbering from upstream to downstream we get:
+    \begin{align*}
+        S_{c,1}&=\dfrac{g}{C_1^2}=\dfrac{\SI{9.81}{\m\per\s\squared}}{(\SI{65}{\chezyunit})^2}=\num{3.2e-3}\Rightarrow S_o < S_{c,1} \Rightarrow \text{Mild slope} \Rightarrow a_{e,1} > a_{c,1}\\
+        S_{c,2}&=\dfrac{g}{C_2^2}=\dfrac{\SI{9.81}{\m\per\s\squared}}{(\SI{55}{\chezyunit})^2}=\num{2.3e-3}\Rightarrow S_o < S_{c,2} \Rightarrow \text{Mild slope} \Rightarrow a_{e,2} > a_{c,2}
+    \end{align*}
+    Furthermore from the definiton of equilibrium depth we know that since only the $C$ changes in this formula:
+    \begin{align*}
+        C_1 > C_2 \Rightarrow a_{e,1} < a_{e,2}
+    \end{align*}
+    Also intuitively we can reason that the smaller roughness in the upstream part will require a smaller gravity force to balance friction, and thus a smaller depth.
+    Lastly the critical depth $a_c$ is equal for the upstream and downstream parts.
+    Although we cannot calculate the exact values for the $a_e$ and $a_c$ we can draw them in the figure using the relations we derived above:
+    
+    \begin{asy}[width=\the\linewidth,inline=true]
+    import trembling;
+    real S_o1 = .1;
+    real S_o2 = .1;
+    
+    real L1= 1;
+    real L2= 1;
+    
+    tremble tr=tremble(angle=20,frequency=0.05,random=50,fuzz=1);
+    
+    real top=.7;
+    pair zb_start = (0,0);
+    pair zb_mid = zb_start + (L1, -L1*S_o1);
+    pair zb_end = zb_mid + (L2, -L2*S_o2);
+    draw(zb_start--zb_mid,linewidth(2));
+    draw(tr.deform(zb_mid--zb_end),linewidth(2));
+    draw(zb_start+(0,-0.1)--zb_start+(0,top), dashed);
+    draw(zb_mid+(0,-0.1)--zb_mid+(0,top), dashed);
+    draw(zb_end+(0,-0.1)--zb_end+(0,top), dashed);
+    draw(zb_start + (L1/5, top/2) -- zb_start + (L1/3, top/2-(L1/3-L1/5)*S_o1),EndArrow);
+    
+    real d_n1=.3, d_c=.2, d_n2=.4;
+    draw("$a_{e,1}$",align=N,shift(0,d_n1)*(zb_start--zb_mid), dashdotted);
+    draw("$a_{e,2}$",align=N,shift(0,d_n2)*(zb_mid--zb_end), dashdotted);
+    draw(Label("$a_c$", position=Relative(0.4)),shift(0,d_c)*(zb_start--zb_mid--zb_end), dashdotted);
+    \end{asy}
+    
+    Since we have a Mild type of slope for both sides, and no particular perturbation to the flow (such as a sluice or a gate) we expect that on both ends the river will be in equilibrium and so the water surface will approach asymptotically the normal depth line. These depths however are different for the two reaches. Since the equilibrium flow is subcritical in a Mild slope, for both reaches we expect water level perturbations to travel upstream. In other words the downstream side will perturb the upstream side and not the other way around. We therefore draw the watersurface from downstream to upstream. The Downstream reach will be completely in equilibrium. The upstream reach will have a depth on the downstream end larger than the normal depth, caused by the rougher downstream reach, thus $a>a_e>a_c$, which means that an M1 backwater curve will develop. When drawing a subcritical backwater curve we always start at the downstream perturbation. The line will then asymptotically approach the normal depth line (i.e. it will slowly approach it and become parallel to it).
+    
+    \begin{asy}[width=\the\linewidth,inline=true]
+    import trembling;
+    real S_o1 = .1;
+    real S_o2 = .1;
+    
+    real L1= 1;
+    real L2= 1;
+    
+    tremble tr=tremble(angle=20,frequency=0.05,random=50,fuzz=1);
+    
+    real top=.7;
+    pair zb_start = (0,0);
+    pair zb_mid = zb_start + (L1, -L1*S_o1);
+    pair zb_end = zb_mid + (L2, -L2*S_o2);
+    draw(zb_start--zb_mid,linewidth(2));
+    draw(tr.deform(zb_mid--zb_end),linewidth(2));
+    draw(zb_start+(0,-0.1)--zb_start+(0,top), dashed);
+    draw(zb_mid+(0,-0.1)--zb_mid+(0,top), dashed);
+    draw(zb_end+(0,-0.1)--zb_end+(0,top), dashed);
+    draw(zb_start + (L1/5, top/2) -- zb_start + (L1/3, top/2-(L1/3-L1/5)*S_o1),EndArrow);
+    
+    real d_n1=.3, d_c=.2, d_n2=.4;
+    draw("$a_{e,1}$",align=S,shift(0,d_n1)*(zb_start--zb_mid), dashdotted);
+    draw("$a_{e,2}$",align=S,shift(0,d_n2)*(zb_mid--zb_end), dashdotted);
+    draw(Label("$a_c$", position=Relative(0.4)),shift(0,d_c)*(zb_start--zb_mid--zb_end), dashdotted);
+    
+    draw(shift(0,d_n2)*(zb_mid--zb_end),blue);
+    draw("M1", align=N,shift(0,d_n1)*(zb_start{dir(zb_start--zb_mid)}..zb_mid+(0,d_n2-d_n1)), blue);
+    \end{asy}
+\end{solution}
+
 \begin{exercise}
   Reproduce the situation above in MATLAB making up some values for the other variables (all the same for the two reaches). Why do the other variables not matter for the kind of backwater that develops
 \end{exercise}
+
+\begin{solution}
+    
+\end{solution}
 
 \begin{exercise}
   Do the same as in the previous two exercises, but now for a bed slope of \num{5e-3}.
