@@ -1,7 +1,7 @@
 restoredefaultpath
 clearvars
 close all
-addpath ~/software/matlab_packages/backwater/
+addpath ~/src/backwater/
 
 %% Definition of backwater objects
 R(3)=Backwater; % River has three pieces
