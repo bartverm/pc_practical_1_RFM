@@ -27,14 +27,13 @@ B(2).So=2*B(2).So; % change the slope
 B(2).x_end=B(2).x0-5e3; % shorten the middle reach
 B(1).x0=B(1).x0+5e3; % move upstream reach downstream
 B(1).x_end=B(1).x_end+5e3; % move upstream reach downstream
-[x,a]=B(2).solve;
+[x,a]=B(2).solve; % get the depth profile for the middle reach
 B(1).a0=a(end); % set the correct bc. for upstream part
 plot(B) % plot the new situation
 
 %% Get depth at upstream end of cutoff and at the upstream end of upstream reach
 hP=B(2).a0; % Extract depth at downstream end of cutoff
-[~,a]=B(2).solve; % Get depth in middle reach
-hR=a(end); % Extract depth at most upstream point
+hR=B(3).a0; % Extract depth at upstream end of cutoff
 
 %% plot the initial erosion and sedimentation
 figure % new figure
