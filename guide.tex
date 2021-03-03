@@ -1195,7 +1195,23 @@ By now you should have a pretty good idea how backwater curves work.
   \end{exercise}
   
   \begin{solution}
-    We compute the depth at P as the boundary condition for the middle reach and at R as the boundary condition for the upstream end.
+    We compute the depth at P as the boundary condition for the middle reach and at R as the boundary condition for the upstream end:
+    \lstinputlisting[linerange={34-36}]{matlab/bend_cutoff_example.m}
+    
+    We output the result to the screen:
+    \begin{lstlisting}
+>> hP
+
+hP =
+
+    4.9999
+
+>> hR
+
+hR =
+
+    4.5656
+    \end{lstlisting}
     
   \end{solution}
 
