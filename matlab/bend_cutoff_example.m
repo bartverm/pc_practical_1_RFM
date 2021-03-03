@@ -32,8 +32,7 @@ B(1).a0=a(end); % set the correct bc. for upstream part
 plot(B) % plot the new situation
 
 %% Get depth at upstream end of cutoff and at the upstream end of upstream reach
-[~,a]=B(1).solve; % Get depth profile in upstream reach
-hP=a(end); % Extract depth at most upstream point
+hP=B(2).a0; % Extract depth at downstream end of cutoff
 [~,a]=B(2).solve; % Get depth in middle reach
 hR=a(end); % Extract depth at most upstream point
 
