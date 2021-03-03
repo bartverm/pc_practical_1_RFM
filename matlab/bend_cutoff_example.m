@@ -33,7 +33,7 @@ plot(B) % plot the new situation
 
 %% Get depth at upstream end of cutoff and at the upstream end of upstream reach
 hP=B(2).a0; % Extract depth at downstream end of cutoff
-hR=B(3).a0; % Extract depth at upstream end of cutoff
+hR=B(1).a0; % Extract depth at upstream end of cutoff
 
 %% plot the initial erosion and sedimentation
 figure % new figure
