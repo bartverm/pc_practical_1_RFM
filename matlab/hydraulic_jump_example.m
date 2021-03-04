@@ -79,11 +79,17 @@ else
     [R.x_end]=deal(x_jump); % set this as ending location for us and ds backwater computation
 end
 
+%% Plot the intersection point
+plot(ax(1),xint,a1_jump,'-.')
+[~,a]=R(2).solve;
+plot(ax(1),x_jump,a(end),'.','MarkerSize',10)
+text(ax(1),x_jump,a(end),'Intersection point','VerticalAlignment','top','HorizontalAlignment','right')
 
-%% Plot result
+%% Plot resulting backwaters
+figure
 plot(R) % plot backwaters
 hold on
 
 % plot undershot gate and weir
-plot(R(2).x0*[1 1], [ylim*[1; 0] R(2).bed_level(1)+weir_level],'k-','linewidth',2)
-plot(R(1).x0*[1 1], [R(1).bed_level(1)+undershot_height ylim*[0; 1]],'k-','linewidth',2)
+plot(R(2).x0*[1 1], [ylim*[1; 0] R(2).bed_level(1)+weir_level],'k-','linewidth',4)
+plot(R(1).x0*[1 1], [R(1).bed_level(1)+undershot_height ylim*[0; 1]],'k-','linewidth',4)
