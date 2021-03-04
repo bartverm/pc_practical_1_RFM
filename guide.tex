@@ -1183,11 +1183,11 @@ By now you should have a pretty good idea how backwater curves work.
   \begin{solution}
     We start by creating the initial situation:
     \lstinputlisting[linerange={7-23}]{matlab/bend_cutoff_example.m}
-    \includegraphics[widht=\linewidth]{matlab/cutoff_initial.pdf}
+    \includegraphics[width=\linewidth]{matlab/cutoff_initial.pdf}
     
     We now modify the case to include the cutoff:
     \lstinputlisting[linerange={25-32}]{matlab/bend_cutoff_example.m}
-    \includegraphics[widht=\linewidth]{matlab/cutoff_final.pdf}
+    \includegraphics[width=\linewidth]{matlab/cutoff_final.pdf}
   \end{solution}
   
   \begin{exercise}
@@ -1228,6 +1228,20 @@ Now, this is interesting. Why do we have both an upstream and a downstream bound
   Construct two backwater objects to represent the two backwater. For now, assume there is no jump and that both backwaters extend over the entire flume. For the weir, assume that the flow becomes critical over the weir. Use a weir height of \SI{5}{\cm} and an undershot opening of \SI{3}{\cm}.
 \end{exercise}
 
+\begin{solution}
+  We create two backwater objects, one with supercritical flow controlled by the upstream undershot gate and one with subcritical flow controlled by the upstream weir:
+  
+  \lstinputlisting[linerange={7-34}]{matlab/hydraulic_jump_example.m}
+  
+  We will now plot the two backwater curves:
+  
+  \lstinputlisting[linerange={36-48}]{matlab/hydraulic_jump_example.m}
+  
+  This results in the following figure:
+  
+  \includegraphics[width=\linewidth]{matlab/hyd_jump_curves.pdf}
+\end{solution}
+
 Now that you have constructed the two backwater, the question is: where does the hydraulic jump occur that makes the upstream backwater 'jump' to the downstream backwater. There is a very specific point where the jump will occur, and this point is determined by a momentum balance over a hydraulic jump. When worked out one can compute the depth  that would occur downstream of a jump ($a_\text{jump}$, given the upsteream depth ($a_1$) and froude number ($Fr_1$):
 \begin{align*}
   a_\text{jump}=\dfrac{a_1}{2}(\sqrt{1+8Fr_1^2}-1)
@@ -1235,12 +1249,18 @@ Now that you have constructed the two backwater, the question is: where does the
 With the two backwaters that you calculated, you can now figure out where in theflume the hydraulic jump would occur such that the upstream backwater curve exactly results in the depth of the downstream hydraulic jump.
 
 \begin{exercise}
-  Determine the $x$ location in the flume where the jump would occur.
+  Determine the $x$ location in the flume where the jump would occur and adapt the two backwater accordingly, such that both backwater end at the hydraulic jump. Note that the backwater curves are computed at different $x$ locations, so you'll have to perform some interpolation to compare the two.
 \end{exercise}
 
-\begin{exercise}
-  Adapt the ending coordinate of the two backwater you made earlier, such that they end at the hydraulic jump, and create a figure of the jump
-\end{exercise}
+\begin{solution}
+  \lstinputlisting[linerange{50-80}]{matlab/hydraulic_jump_example.m}
+  
+  We can illustrate what we did by plotting the depth at which the upstream supercritical flow would jump into the plot with the subcritical downstream jump and highlight the intersection point:
+
+  \lstinputlisting[linerange{82-86}]{matlab/hydraulic_jump_example.m}
+  \includegraphics[width=\linewidth]
+  
+\end{solution}
 
 \begin{exercise}
   Can you make the jump move left and right, by adjusting the weir and gate levels?
