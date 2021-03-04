@@ -1,7 +1,8 @@
 %% Cleaning the workspace
+restoredefaultpath
 clearvars
 close all
-addpath ~/software/matlab_packages/backwater/
+addpath ~/src/backwater/
 
 %% Setting parameters
 Q=0.025;
@@ -20,7 +21,7 @@ R(2)=Backwater; % create two Backwater objects (first is upstream second is down
 [R.So]=deal(So);
 [R.bed_offset]=deal(0.02);
 
-%% Initial computation over entire flume and localization of jump
+%% Initial computation over entire flume
 % set start and end of computation and boundary condition for downstream part
 R(2).x0=L_flume; % computation starts downstream for subcritical case
 R(2).a0=weir_level+R(2).a_critical; % set downstream bc at weir level plus critical depth (free overflow)
@@ -32,13 +33,28 @@ R(1).a0=undershot_height; % set depth at undershot height
 R(1).x_end=L_flume; % computation stops at end of flume (compute this backwater also over entire flume)
 R(1).zb0=R(2).bed_level(2); % set correct bed level
 
+%% Plot initial situation
+figure % new figure
+ax(2)=subplot(2,1,1); % create a subplot on a 2x1 grid and select the first plot
+R(1).plot % plot the backwater
+hold on % Make sure next plots (undershot gate) is added to the plot
+title('Supercritical curve') % give the plot a title
+ax(1)=subplot(2,1,2); % select the second plot
+R(2).plot % plot the subcritical curve
+title('Subcritical curve') % give a title to the plot
+linkaxes(ax,'xy') % make sure two plots have same axes limits
+hold on % make sure next plot (weir) is added to the plot
+plot(ax(2), ax(2).XLim(1)*[1 1], [undershot_height ax(2).YLim(2)],'k','Linewidth',4); % plot undershot gate
+plot(ax(1), ax(1).XLim(2)*[1 1], [-R(1).bed_offset weir_level],'k','Linewidth',4); % plot weir
+
+%% Localize hydraulic jump
 [x1,a1]=R(1).solve(); % solve upstream backwater curve (at x with depth a)
 froude2=R(1).Q^2/R(1).g/R(1).b^2./a1.^3; % compute fr^2 for hydraulic jump formula
 a1_jump=a1/2.*(sqrt(1+8*froude2)-1); % compute depth at which water would jump from upstream depth and froude number
 
 [x2,a2]=R(2).solve(); % solve downstream backwater curve (note that this is solved at different locations as first backwater)
 
-%% Interpolate the depths either to locations us or ds curve
+% Interpolate the depths either to locations us or ds curve
 if numel(x2)>numel(x1) % if ds curve has more points than us curve interpolate to ds curve
     xint=x2;
     a1_jump=interp1(x1,a1_jump,xint); % check matlab's help to understand this interpolation function (help interp1)
@@ -47,7 +63,6 @@ else % otherwise interpolate to us curve
     a2=interp1(x2,a2,xint);
 end
 
-%% Localize hydraulic jump
 % jump is where the predicted jump depth from us curve matches ds curve
 adiff=a2-a1_jump; % this is ds depth minus jump depth. Hydraulic jump will occur when this is 0
 
