@@ -1253,13 +1253,15 @@ With the two backwaters that you calculated, you can now figure out where in the
 \end{exercise}
 
 \begin{solution}
-  \lstinputlisting[linerange{50-80}]{matlab/hydraulic_jump_example.m}
+  \lstinputlisting[linerange={50-80}]{matlab/hydraulic_jump_example.m}
   
   We can illustrate what we did by plotting the depth at which the upstream supercritical flow would jump into the plot with the subcritical downstream jump and highlight the intersection point:
 
-  \lstinputlisting[linerange{82-86}]{matlab/hydraulic_jump_example.m}
-  \includegraphics[width=\linewidth]
+  \lstinputlisting[linerange={82-86}]{matlab/hydraulic_jump_example.m}
+  \includegraphics[width=\linewidth]{matlab/hyd_jump_intersect.pdf}
   
+  Let's now plot the final result:
+  \lstinputlisting[linerange={88-95}]{matlab/hyd_jump_final.pdf}
 \end{solution}
 
 \begin{exercise}
