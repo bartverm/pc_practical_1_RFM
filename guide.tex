@@ -1261,12 +1261,18 @@ With the two backwaters that you calculated, you can now figure out where in the
   \includegraphics[width=\linewidth]{matlab/hyd_jump_intersect.pdf}
   
   Let's now plot the final result:
-  \lstinputlisting[linerange={88-95}]{matlab/hyd_jump_final.pdf}
+  \lstinputlisting[linerange={88-95}]{matlab/hydraulic_jump_example.m}
+  \includegraphics[width=\linewidth]{matlab/hyd_jump_final.pdf}
 \end{solution}
 
 \begin{exercise}
   Can you make the jump move left and right, by adjusting the weir and gate levels?
 \end{exercise}
+
+\begin{solution}
+  We can re-use the script above and slightly modify the input parameters to move the hydraulic jump. For a move to the left (upstream) we can raise the weir to e.g. \si{6}{\cm} resulting in the following situation:
+  \includegraphics[width=\linewidth]{matl}
+\end{solution}
 
 Of course, there are many simplifications in the calculations used above. To test the accuracy of your computation you will create a hydraulic jump in the laboratory, and as part of that practical you can compare the practical results with the results from your backwater calculations.
 
